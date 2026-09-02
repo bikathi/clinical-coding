@@ -20,3 +20,19 @@ export interface RetrievalResults {
   icdMatches: ICDMatch[];
   guidelineMatches: GuidelineMatch[];
 }
+
+export interface ReasonerOutput {
+  codes: {
+    id: string;
+    code: string;
+    title: string;
+    confidence: number;
+    rationale: string;
+  }[];
+  guidelines: {
+    id: string;
+    title: string;
+    confidence: number;
+    rationale: string;
+  }[];
+}
