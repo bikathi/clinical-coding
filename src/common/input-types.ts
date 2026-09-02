@@ -26,3 +26,8 @@ export interface TokenizerInput {
   text: string;
   language?: string; // e.g. 'English', 'Spanish', 'French'
 }
+
+export interface RetrieverInput {
+  note: string;
+  topK?: number;
+}
