@@ -3,13 +3,15 @@ import { Tokenizer } from "./tokenizer.service.js";
 import { RetrieverInput, TokenizerInput } from "../common/input-types.js";
 import { Retriever } from "./retriever.service.js";
 import { Reasoner } from "./reasonser.service.js";
+import { Formatter } from "./formatter.service.js";
 
 @Injectable()
 export class PipelineOrchestrator {
   constructor(
     private readonly tokenizer: Tokenizer,
     private readonly retriever: Retriever,
-    private readonly reasoner: Reasoner
+    private readonly reasoner: Reasoner,
+    private readonly formatter: Formatter
   ) { }
 
   async execute(note: string, language: string = 'English') {
@@ -24,11 +26,14 @@ export class PipelineOrchestrator {
     // Step 3: Reason
     const reasoned = await this.reasoner.execute(retrievalResults);
 
-    // Later: pass tokens into retriever → reasoner → formatter
+    // Step 4: Format
+    const formatted = await this.formatter.execute(reasoned);
+    
     return {
       tokens,
       retrievalResults,
       reasoned,
+      formatted,
     };
   }
 }
