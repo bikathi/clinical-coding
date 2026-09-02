@@ -21,3 +21,8 @@ export enum FileType {
   GUIDELINE_SNIPPET = 'GUIDELINE_SNIPPET',
   ICD_CATALOG = 'ICD_CATALOG',
 }
+
+export interface TokenizerInput {
+  text: string;
+  language?: string; // e.g. 'English', 'Spanish', 'French'
+}
