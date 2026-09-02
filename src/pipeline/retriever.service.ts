@@ -71,10 +71,6 @@ export class Retriever implements PipelineStep<RetrieverInput, any> {
         };
       });
 
-    // For now, log results for sanity check
-    console.log('ICD Matches:', icdMatches);
-    console.log('Guideline Matches:', guidelineMatches);
-
     // Return structured response
     return {
       icdMatches,
