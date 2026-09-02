@@ -8,15 +8,30 @@ importers:
 
   .:
     dependencies:
+      '@langchain/core':
+        specifier: ^1.2.9
+        version: 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
+      '@langchain/openai':
+        specifier: ^1.5.11
+        version: 1.5.11(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(undici@6.20.1)
       '@nestjs/common':
         specifier: ^12.0.1
         version: 12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^12.0.0
+        version: 12.0.0(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/core':
         specifier: ^12.0.1
         version: 12.0.1(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@12.0.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/platform-express':
         specifier: ^12.0.1
         version: 12.0.1(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.0.1)
+      '@types/express-session':
+        specifier: ^1.19.0
+        version: 1.19.0
+      '@types/multer':
+        specifier: ^2.2.0
+        version: 2.2.0
       chromadb:
         specifier: ^3.5.0
         version: 3.5.0
@@ -25,7 +40,7 @@ importers:
         version: 7.5.0
       langchain:
         specifier: ^1.5.10
-        version: 1.5.10(@langchain/core@1.2.9)
+        version: 1.5.10(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
@@ -52,8 +67,11 @@ importers:
         specifier: ^12.0.1
         version: 12.0.1(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.0.1)(@nestjs/platform-express@12.0.1)
       '@types/express':
-        specifier: ^5.0.0
+        specifier: ^5.0.6
         version: 5.0.6
+      '@types/lodash':
+        specifier: ^4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ^24.0.0
         version: 24.13.3
@@ -318,6 +336,12 @@ packages:
       '@langchain/core': ^1.1.48
       zod: ^3.25.32 || ^4.2.0
 
+  '@langchain/openai@1.5.11':
+    resolution: {integrity: sha512-BvGp5lQk5//0WVwTIepscazFpneT9I9+mc+kp+cLuhGHFb7mc9zGNrusZOXoa3p73SN0i3XqTo8lyIndpVx3Hw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@langchain/core': ^1.2.9
+
   '@langchain/protocol@0.0.18':
     resolution: {integrity: sha512-XW1egQtPfsGI41w2AMZNFZrUIwFSQHTjVMZs0OaTpCAvht/QLoaPN8FQcsysMVypOhupG28J29yOorrc70otBQ==}
 
@@ -374,6 +398,12 @@ packages:
         optional: true
       class-validator:
         optional: true
+
+  '@nestjs/config@12.0.0':
+    resolution: {integrity: sha512-pG5+fFfCo3cdgVkLJLvvhUGfxEjwzv9hIAQ1aJVHvHlHVniDWfwX5pR/utgoAkJzSikv2oTR1BmIF03FXdi42Q==}
+    peerDependencies:
+      '@nestjs/common': ^11.0.0 || ^12.0.0
+      rxjs: ^7.1.0
 
   '@nestjs/core@12.0.1':
     resolution: {integrity: sha512-rU6tAi8vDdyzHgN0iW0J4UJvziroOqzHqzlqL7phOSPizaXVEePfv+OUOsdJEOh0Qd14mslc3udOheLrAEcZow==}
@@ -729,6 +759,9 @@ packages:
   '@types/express-serve-static-core@5.1.3':
     resolution: {integrity: sha512-dPfW8NFiOF4wOHc7+N/QSxlY9cfSsenewGbAz8C8U/MULPd/YZ27LvJUIlzaXie7e6Ove9YunJGgC9tbHD2cKw==}
 
+  '@types/express-session@1.19.0':
+    resolution: {integrity: sha512-GbypG0bog68UbOq2tSAp7SclvCUm3ha1uDi58OPRGK1NfRvCIu7Gz0M7fTGtpNG1T9a29GpuurQj9zEcT/lMXQ==}
+
   '@types/express@5.0.6':
     resolution: {integrity: sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==}
 
@@ -738,8 +771,14 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
+  '@types/lodash@4.17.25':
+    resolution: {integrity: sha512-+K1NIO8I+F9/wNulfVvu23QYd0Pe9/OCqRrim4NoYIf1VoEDL90Ve4ClzpyqBLc7NpGGWRvYNCKZ1BE/Jpf8dQ==}
+
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
+
+  '@types/multer@2.2.0':
+    resolution: {integrity: sha512-3U1troeqGV8Ntp7Q3klwf4zr23VEoqYVocYXaswm9+8z3O9UHDYAqLxjJ/h550iRADTjKdOdhhasXw6gD6kYtg==}
 
   '@types/node@24.13.3':
     resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
@@ -1104,6 +1143,10 @@ packages:
   dezalgo@1.0.4:
     resolution: {integrity: sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==}
 
+  dotenv-expand@13.0.0:
+    resolution: {integrity: sha512-aBfBS8eYIeXmpHI9ThIlA7/WLq+SLt18iXUZhb52rW89QLKQFoIpPG1bPeewoPZsTyjSSO3T7234FBVUM1V2rA==}
+    engines: {node: '>=12'}
+
   dotenv@17.4.2:
     resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
     engines: {node: '>=12'}
@@ -1143,6 +1186,9 @@ packages:
   es-set-tostringtag@2.1.0:
     resolution: {integrity: sha512-j6vWzfrGVfyXxge+O0x5sh6cvxAog0a/4Rdd2K36zCMV5eJ+/+tOAngRO8cODMNWbVRdVlmGZQL2YS3yR8bIUA==}
     engines: {node: '>= 0.4'}
+
+  es-toolkit@1.51.0:
+    resolution: {integrity: sha512-zC2lQGkM7QX+Gm6iM3+WIdZJzthsEd14LvRNJneSO2hzyz/zNBENR8+YXWo1cKxgPBtV6ksPYHELbcwBRzmdCw==}
 
   escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
@@ -1675,6 +1721,30 @@ packages:
   onetime@7.0.0:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
+
+  openai@7.8.0:
+    resolution: {integrity: sha512-/2g9JzdnXNcjX1W/UlSNu+OdSFDAaAVt0n9Onom0kPenH54o59G2WrX/xjTnr26UHNSh6hxcAf58doGYRme2rw==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@aws-sdk/credential-provider-node': '>=3.972.0 <4'
+      '@smithy/hash-node': '>=4.3.0 <5'
+      '@smithy/signature-v4': '>=5.4.0 <6'
+      undici: '>=5 <9'
+      ws: ^8.21.0
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      '@aws-sdk/credential-provider-node':
+        optional: true
+      '@smithy/hash-node':
+        optional: true
+      '@smithy/signature-v4':
+        optional: true
+      undici:
+        optional: true
+      ws:
+        optional: true
+      zod:
+        optional: true
 
   ora@5.4.1:
     resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
@@ -2454,12 +2524,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@langchain/core@1.2.9':
+  '@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))':
     dependencies:
       '@cfworker/json-schema': 4.1.1
       '@standard-schema/spec': 1.1.0
       js-tiktoken: 1.0.21
-      langsmith: 0.9.0
+      langsmith: 0.9.0(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
       mustache: 4.2.0
       p-queue: 6.6.2
       zod: 4.5.4
@@ -2470,29 +2540,42 @@ snapshots:
       - openai
       - ws
 
-  '@langchain/langgraph-checkpoint@1.1.5(@langchain/core@1.2.9)':
+  '@langchain/langgraph-checkpoint@1.1.5(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))':
     dependencies:
-      '@langchain/core': 1.2.9
+      '@langchain/core': 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
 
-  '@langchain/langgraph-sdk@1.10.0(@langchain/core@1.2.9)':
+  '@langchain/langgraph-sdk@1.10.0(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))':
     dependencies:
-      '@langchain/core': 1.2.9
+      '@langchain/core': 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
       '@langchain/protocol': 0.0.19
       '@types/json-schema': 7.0.15
       p-queue: 9.3.3
       p-retry: 7.1.1
 
-  '@langchain/langgraph@1.4.13(@langchain/core@1.2.9)(zod@4.5.4)':
+  '@langchain/langgraph@1.4.13(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(zod@4.5.4)':
     dependencies:
-      '@langchain/core': 1.2.9
-      '@langchain/langgraph-checkpoint': 1.1.5(@langchain/core@1.2.9)
-      '@langchain/langgraph-sdk': 1.10.0(@langchain/core@1.2.9)
+      '@langchain/core': 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
+      '@langchain/langgraph-checkpoint': 1.1.5(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))
+      '@langchain/langgraph-sdk': 1.10.0(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))
       '@langchain/protocol': 0.0.18
       '@standard-schema/spec': 1.1.0
       zod: 4.5.4
     transitivePeerDependencies:
       - react
       - react-dom
+
+  '@langchain/openai@1.5.11(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(undici@6.20.1)':
+    dependencies:
+      '@langchain/core': 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
+      js-tiktoken: 1.0.21
+      openai: 7.8.0(undici@6.20.1)(zod@4.5.4)
+      zod: 4.5.4
+    transitivePeerDependencies:
+      - '@aws-sdk/credential-provider-node'
+      - '@smithy/hash-node'
+      - '@smithy/signature-v4'
+      - undici
+      - ws
 
   '@langchain/protocol@0.0.18': {}
 
@@ -2536,6 +2619,15 @@ snapshots:
       uid: 2.0.2
     transitivePeerDependencies:
       - supports-color
+
+  '@nestjs/config@12.0.0(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@nestjs/common': 12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@standard-schema/spec': 1.1.0
+      dotenv: 17.4.2
+      dotenv-expand: 13.0.0
+      es-toolkit: 1.51.0
+      rxjs: 7.8.2
 
   '@nestjs/core@12.0.1(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@12.0.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
@@ -2765,6 +2857,10 @@ snapshots:
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
 
+  '@types/express-session@1.19.0':
+    dependencies:
+      '@types/express': 5.0.6
+
   '@types/express@5.0.6':
     dependencies:
       '@types/body-parser': 1.19.6
@@ -2775,7 +2871,13 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/lodash@4.17.25': {}
+
   '@types/methods@1.1.4': {}
+
+  '@types/multer@2.2.0':
+    dependencies:
+      '@types/express': 5.0.6
 
   '@types/node@24.13.3':
     dependencies:
@@ -3114,6 +3216,10 @@ snapshots:
       asap: 2.0.6
       wrappy: 1.0.2
 
+  dotenv-expand@13.0.0:
+    dependencies:
+      dotenv: 17.4.2
+
   dotenv@17.4.2: {}
 
   dunder-proto@1.0.1:
@@ -3146,6 +3252,8 @@ snapshots:
       get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
       hasown: 2.0.4
+
+  es-toolkit@1.51.0: {}
 
   escape-html@1.0.3: {}
 
@@ -3394,12 +3502,12 @@ snapshots:
 
   kareem@3.3.0: {}
 
-  langchain@1.5.10(@langchain/core@1.2.9):
+  langchain@1.5.10(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(openai@7.8.0(undici@6.20.1)(zod@4.5.4)):
     dependencies:
-      '@langchain/core': 1.2.9
-      '@langchain/langgraph': 1.4.13(@langchain/core@1.2.9)(zod@4.5.4)
-      '@langchain/langgraph-checkpoint': 1.1.5(@langchain/core@1.2.9)
-      langsmith: 0.9.0
+      '@langchain/core': 1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
+      '@langchain/langgraph': 1.4.13(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))(zod@4.5.4)
+      '@langchain/langgraph-checkpoint': 1.1.5(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(zod@4.5.4)))
+      langsmith: 0.9.0(openai@7.8.0(undici@6.20.1)(zod@4.5.4))
       zod: 4.5.4
     transitivePeerDependencies:
       - '@opentelemetry/api'
@@ -3410,9 +3518,11 @@ snapshots:
       - react-dom
       - ws
 
-  langsmith@0.9.0:
+  langsmith@0.9.0(openai@7.8.0(undici@6.20.1)(zod@4.5.4)):
     dependencies:
       p-queue: 6.6.2
+    optionalDependencies:
+      openai: 7.8.0(undici@6.20.1)(zod@4.5.4)
 
   lightningcss-android-arm64@1.33.0:
     optional: true
@@ -3650,6 +3760,11 @@ snapshots:
   onetime@7.0.0:
     dependencies:
       mimic-function: 5.0.1
+
+  openai@7.8.0(undici@6.20.1)(zod@4.5.4):
+    optionalDependencies:
+      undici: 6.20.1
+      zod: 4.5.4
 
   ora@5.4.1:
     dependencies:
