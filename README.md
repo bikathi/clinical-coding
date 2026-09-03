@@ -134,23 +134,12 @@ POST /process
 
 ---
 
-## Running the CLI in Docker
+## Running the App in Docker
 
-> The Docker image is based on Ubuntu 22.04 image. We install Python, ChromaDB and NodeJS. This is slower but ensures reproducibility of the image.
-
----
-
-## Key Improvements
-
-- **Base image**: `node:20-bullseye` → Node preinstalled, Debian mirrors more reliable.  
-- **apt options**: `Acquire::Retries` and `ForceIPv4` → avoids long hangs.  
-- **Chroma ingestion**: runs against ChromaDB directly, not NestJS. No fragile background Nest process.  
-- **Cleanup**: removed unused `APP_PORT` and `CHROMA_DB_PORT` envs. Only keep what you actually use.  
-- **No EXPOSE**: since reviewers only run CLI inside the container, we don’t expose ports.
-
----
-
-### Running in Docker
+### Build It
+```bash
+docker build -t clinical-pipeline .
+```
 
 This image is based on Node LTS (20) with Python + ChromaDB installed. Test vectors are pre‑loaded into `/app/db` during build.
 
