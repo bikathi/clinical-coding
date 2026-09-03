@@ -2,15 +2,15 @@ import { Injectable } from "@nestjs/common";
 import { PipelineStep } from "./pipeline.interface.js";
 import { RetrieverInput } from "../common/input-types.js";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { ChromaClient } from 'chromadb';
+import { Pinecone } from "@pinecone-database/pinecone";
 import { GuidelineMatch, ICDMatch } from "../common/chroma-retriever-types.js";
 
 @Injectable()
 export class Retriever implements PipelineStep<RetrieverInput, any> {
-  private client = new ChromaClient({
-    port: process.env.CHROMA_DB_PORT! as unknown as number,
-    ssl: false,
+  private pc = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY!
   });
+  private index = this.pc.index("clinical-pipeline");
   private embedder = new OpenAIEmbeddings({
     modelName: process.env.OPENAI_MODEL!,
   });
@@ -21,55 +21,47 @@ export class Retriever implements PipelineStep<RetrieverInput, any> {
     // Generate embedding for the consult note
     const embedding = await this.embedder.embedQuery(note);
 
-    // Query ICD catalog collection
-    const icdCollection = await this.client.getCollection({
-      name: 'icd_catalog',
-      embeddingFunction: null as any
-    });
-    const icdResults = await icdCollection.query({
-      queryEmbeddings: [embedding],
-      nResults: topK,
+    // Query ICD catalog namespace
+    const icdResults = await this.index.query({
+      vector: embedding,
+      topK,
+      namespace: "icd_catalog",
+      includeMetadata: true,
     });
 
-    // Query guideline snippets collection
-    const guidelineCollection = await this.client.getCollection({
-      name: 'guideline_snippets',
-      embeddingFunction: null as any
-    });
-    const guidelineResults = await guidelineCollection.query({
-      queryEmbeddings: [embedding],
-      nResults: topK,
+    // Query guideline snippets namespace
+    const guidelineResults = await this.index.query({
+      vector: embedding,
+      topK,
+      namespace: "guideline_snippets",
+      includeMetadata: true,
     });
 
-    // Map ICD results safely
-    const icdMatches: ICDMatch[] = (icdResults.documents[0] || [])
-      .filter((doc: string | null): doc is string => doc !== null)
-      .map((doc: string, idx: number) => {
-        const parsed = JSON.parse(doc);
-        return {
-          id: icdResults.ids[0][idx],
-          code: parsed.code,
-          title: parsed.title,
-          chapter: parsed.chapter,
-          synonyms: parsed.synonyms,
-          distance: icdResults.distances[0][idx] ?? null,
-        };
-      });
-    
-    // Map Guideline results safely
-    const guidelineMatches: GuidelineMatch[] = (guidelineResults.documents[0] || [])
-      .filter((doc: string | null): doc is string => doc !== null)
-      .map((doc: string, idx: number) => {
-        const parsed = JSON.parse(doc);
-        return {
-          id: guidelineResults.ids[0][idx],
-          title: parsed.title,
-          source: parsed.source,
-          effective: parsed.effective,
-          text: parsed.text,
-          distance: guidelineResults.distances[0][idx] ?? null,
-        };
-      });
+    // Map ICD results
+    const icdMatches: ICDMatch[] = (icdResults.matches || []).map((match) => {
+      const md = match.metadata as any;
+      return {
+        id: match.id,
+        code: md.code,
+        title: md.title,
+        chapter: md.chapter,
+        synonyms: md.synonyms,
+        distance: match.score ?? null,
+      };
+    });
+
+    // Map Guideline results
+    const guidelineMatches: GuidelineMatch[] = (guidelineResults.matches || []).map((match) => {
+      const md = match.metadata as any;
+      return {
+        id: match.id,
+        title: md.title,
+        source: md.source,
+        effective: md.effective,
+        text: md.text,
+        distance: match.score ?? null,
+      };
+    });
 
     // Return structured response
     return {
@@ -77,5 +69,4 @@ export class Retriever implements PipelineStep<RetrieverInput, any> {
       guidelineMatches,
     };
   }
-
 }
