@@ -9,7 +9,7 @@ This project implements a backend pipeline that takes a **clinical note** as inp
 
   1. Helped validate my tech stack of choice - dependencies e.t.c
   2. Helped speed up code structure - patterns, decisions, classes, interfaces and tiny bootup scripts
-  3. Helped troubleshoot multiple Dockerfile setup and build issues.
+  3. Helped troubleshoot multiple Dockerfile setup, networking and build issues.
 
 - Challenges I faced include:
   1. Dockerization gave me multiple timeouts coz of my region's internet speed caping.
@@ -22,7 +22,7 @@ The flow is:
 
 1. **Clinical note in**  
 2. **Tokenizer** → normalize and stem text  
-3. **Retriever** → embed note and query ChromaDB collections  
+3. **Retriever** → embed note and query Pinecone collections  
 4. **Reasoner** → score, filter, and detect conflicts among matches  
 5. **Formatter** → produce a clean JSON schema with status and ranked candidates  
 
@@ -139,11 +139,13 @@ POST /process
 
 2. Build and run the container:
    ```bash
-   docker build  --build-arg OPENAI_API_KEY=$OPENAI_API_KEY -t clinical-pipeline .
+   docker build  --build-arg OPENAI_API_KEY=$OPENAI_API_KEY --build-arg PINECONE_API_KEY=$PINECONE_API_KEY -t clinical-pipeline .
    docker run -d \
      -e OPENAI_API_KEY=$OPENAI_API_KEY \
+     -e PINECONE_API_KEY=$PINECONE_API_KEY \
      -p 3000:3000
      -v $(pwd)/notes:/app/data \
+     --network host
      --name clinical-pipeline \
      clinical-pipeline
    ```
