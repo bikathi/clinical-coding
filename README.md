@@ -1,7 +1,3 @@
-Here’s a full **README.md draft** for your project, written to capture everything we’ve built and discussed. It explains the architecture, flow, design choices, and explicitly addresses the “uncertain” status logic as required in **BRIEF.md**.
-
----
-
 # Clinical Note Coding Pipeline
 
 ## Overview
@@ -123,13 +119,27 @@ POST /process
 
 ---
 
-## Next Steps
+### Running the CLI
 
-- **UI**: Build a simple frontend to display probable codes/guidelines sorted by confidence, with a clear `"ok"` vs `"uncertain"` status.  
-- **Dockerization**: Containerize the backend for easy deployment and testing.
+The CLI supports:
+- **JSON file**: `["note1","note2"]` → multiple notes.  
+- **Text file**: multi‑line notes, each line processed separately.  
+- **Inline note**: pass a string directly as the second argument after file - file doesn't have to exist.
+
+Examples:
+```bash
+node dist/cli.js ./notes.json
+node dist/cli.js ./notes.txt
+node dist/cli.js dummy.txt "Patient has fever and cough." // dummy.txt doesn\'t need to exist
+```
+
+Inside Docker:
+```bash
+docker run -v $(pwd)/notes.json:/app/notes.json clinical-pipeline \
+  node dist/cli.js /app/notes.json
+
+docker run clinical-pipeline \
+  node dist/cli.js dummy.txt "Patient has fever and cough."
+```
 
 ---
-
-This README captures the entire backend design, explains the reasoning behind thresholds and uncertainty, and aligns with the test requirements in **BRIEF.md**.  
-
-Would you like me to now sketch the **UI wireframe** (basic layout: input box for note, language selector, results table with confidence bars) before we move on to Dockerizing?
