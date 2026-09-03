@@ -3,6 +3,21 @@
 ## Overview
 This project implements a backend pipeline that takes a **clinical note** as input and produces a set of **probable ICD codes** and **supporting guideline matches**. The system is designed to demonstrate how natural language processing, semantic retrieval, and rule-based reasoning can be combined to support clinical coding.
 
+## Development Background
+- The system took about **3 and 1/2** hours to develop across a 1 and 1/2 day interval.
+- The system was developed alongside Microsoft Copilot (in the browser, not an IDE plugin) which:
+
+  1. Helped validate my tech stack of choice - dependencies e.t.c
+  2. Helped speed up code structure - patterns, decisions, classes, interfaces and tiny bootup scripts
+  3. Helped troubleshoot multiple Dockerfile setup and build issues.
+
+- Challenges I faced include:
+  1. Dockerization gave me multiple timeouts coz of my region's internet speed caping.
+  2. Issues with ChromaDB install and running on my Windows dev machine.
+  3. Initial trouble understanding the dataset.
+
+- Because of the challenges, this system assumes the input files are JSON (A JSON string array), or a multiline txt file.
+
 The flow is:
 
 1. **Clinical note in**  
@@ -119,27 +134,49 @@ POST /process
 
 ---
 
-### Running the CLI
+## Running the CLI in Docker
 
-The CLI supports:
-- **JSON file**: `["note1","note2"]` → multiple notes.  
-- **Text file**: multi‑line notes, each line processed separately.  
-- **Inline note**: pass a string directly as the second argument after file - file doesn't have to exist.
-
-Examples:
-```bash
-node dist/cli.js ./notes.json
-node dist/cli.js ./notes.txt
-node dist/cli.js dummy.txt "Patient has fever and cough." // dummy.txt doesn\'t need to exist
-```
-
-Inside Docker:
-```bash
-docker run -v $(pwd)/notes.json:/app/notes.json clinical-pipeline \
-  node dist/cli.js /app/notes.json
-
-docker run clinical-pipeline \
-  node dist/cli.js dummy.txt "Patient has fever and cough."
-```
+> The Docker image is based on Ubuntu 22.04 image. We install Python, ChromaDB and NodeJS. This is slower but ensures reproducibility of the image.
 
 ---
+
+## Key Improvements
+
+- **Base image**: `node:20-bullseye` → Node preinstalled, Debian mirrors more reliable.  
+- **apt options**: `Acquire::Retries` and `ForceIPv4` → avoids long hangs.  
+- **Chroma ingestion**: runs against ChromaDB directly, not NestJS. No fragile background Nest process.  
+- **Cleanup**: removed unused `APP_PORT` and `CHROMA_DB_PORT` envs. Only keep what you actually use.  
+- **No EXPOSE**: since reviewers only run CLI inside the container, we don’t expose ports.
+
+---
+
+### Running in Docker
+
+This image is based on Node LTS (20) with Python + ChromaDB installed. Test vectors are pre‑loaded into `/app/db` during build.
+
+- **File of notes (JSON)**:
+
+Assuming you have a notes.json directly in your computer somewhere:
+  ```bash
+  docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
+    -v $(pwd)/notes.json:/app/notes.json \
+    clinical-pipeline
+  ```
+This mounts your local notes.json into the container at /app/notes.json. The CLI then runs against it.
+
+- **File of notes (TXT)**:
+For a multi-line text (.txt) file somewhere on your computer:
+  ```bash
+  docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
+    -v $(pwd)/notes.txt:/app/notes.txt \
+    clinical-pipeline \
+    node dist/cli.js /app/notes.txt
+  ```
+
+- **Single Inline Test**:
+To see results for a single test:
+```bash
+docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
+  clinical-pipeline \
+  node dist/cli.js dummy.txt "Patient has fever and cough."
+```
