@@ -44,5 +44,6 @@ RUN chroma run --path /app/db --port 8000 & \
     pkill -f "chroma run" && \
     pkill -f "node dist/main.js"
 
+EXPOSE 3000
 
 CMD ["supervisord", "-n"]

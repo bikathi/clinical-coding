@@ -133,39 +133,31 @@ POST /process
 → `"ok"`, pneumonia/cough codes at high confidence.
 
 ---
+### Running the Pipeline
 
-## Running the App in Docker
+1. Create a `notes/` folder locally and add your `.txt` or `.json` files.
 
-### Build It
-```bash
-docker build -t clinical-pipeline .
-```
+2. Build and run the container:
+   ```bash
+   docker build  --build-arg OPENAI_API_KEY=$OPENAI_API_KEY -t clinical-pipeline .
+   docker run -d \
+     -e OPENAI_API_KEY=$OPENAI_API_KEY \
+     -p 3000:3000
+     -v $(pwd)/notes:/app/data \
+     --name clinical-pipeline \
+     clinical-pipeline
+   ```
 
-This image is based on Node LTS (20) with Python + ChromaDB installed. Test vectors are pre‑loaded into `/app/db` during build.
-
-- **File of notes (JSON)**:
-
-Assuming you have a notes.json directly in your computer somewhere:
-  ```bash
-  docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
-    -v $(pwd)/notes.json:/app/notes.json \
-    clinical-pipeline
-  ```
-This mounts your local notes.json into the container at /app/notes.json. The CLI then runs against it.
-
-- **File of notes (TXT)**:
-For a multi-line text (.txt) file somewhere on your computer:
-  ```bash
-  docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
-    -v $(pwd)/notes.txt:/app/notes.txt \
-    clinical-pipeline \
-    node dist/cli.js /app/notes.txt
-  ```
-
-- **Single Inline Test**:
-To see results for a single test:
-```bash
-docker run -e OPENAI_API_KEY=$OPENAI_API_KEY \
-  clinical-pipeline \
-  node dist/cli.js dummy.txt "Patient has fever and cough."
-```
+3. Run the CLI against your files:
+   - For a TXT file:
+     ```bash
+     docker exec -it clinical-pipeline node dist/cli.js /app/data/notes.txt
+     ```
+   - For a JSON file:
+     ```bash
+     docker exec -it clinical-pipeline node dist/cli.js /app/data/notes.json
+     ```
+   - For an inline note:
+     ```bash
+     docker exec -it clinical-pipeline node dist/cli.js dummy.txt "Patient has fever and cough."
+     ```
