@@ -133,24 +133,44 @@ POST /process
 → `"ok"`, pneumonia/cough codes at high confidence.
 
 ---
+
 ### Running the Pipeline
 
 1. Create a `notes/` folder locally and add your `.txt` or `.json` files.
 
-2. Build and run the container:
+2. **Option A: Raw Docker run**
    ```bash
-   docker build  --build-arg OPENAI_API_KEY=$OPENAI_API_KEY --build-arg PINECONE_API_KEY=$PINECONE_API_KEY -t clinical-pipeline .
+   docker build \
+     --build-arg OPENAI_API_KEY=$OPENAI_API_KEY \
+     --build-arg PINECONE_API_KEY=$PINECONE_API_KEY \
+     -t clinical-pipeline .
+
    docker run -d \
      -e OPENAI_API_KEY=$OPENAI_API_KEY \
      -e PINECONE_API_KEY=$PINECONE_API_KEY \
-     -p 3000:3000
+     -e PINECONE_ENV=us-east-1-aws \
+     -p 3000:3000 \
      -v $(pwd)/notes:/app/data \
-     --network host
+     --network host \
      --name clinical-pipeline \
      clinical-pipeline
    ```
 
-3. Run the CLI against your files:
+3. **Option B: Docker Compose**
+   - Create a `.env` file in the project root with:
+     ```env
+     OPENAI_API_KEY=sk-your-openai-key
+     PINECONE_API_KEY=your-pinecone-key
+     PINECONE_ENV=us-east-1-aws
+     ```
+   - Run:
+     ```bash
+     docker-compose up --build -d
+     ```
+
+   This will build and start the `clinical-pipeline` service with the environment variables injected from `.env`.
+
+4. Run the CLI against your files:
    - For a TXT file:
      ```bash
      docker exec -it clinical-pipeline node dist/cli.js /app/data/notes.txt
@@ -163,3 +183,11 @@ POST /process
      ```bash
      docker exec -it clinical-pipeline node dist/cli.js dummy.txt "Patient has fever and cough."
      ```
+
+---
+
+### 🔑 Keys Required
+- You must provide both **OPENAI_API_KEY** and **PINECONE_API_KEY**.  
+- When using Compose, define them in a `.env` file alongside `PINECONE_ENV` (your Pinecone environment, e.g. `us-east-1-aws`).  
+
+---
